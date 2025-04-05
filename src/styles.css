@@ -1,1 +1,83 @@
+/* public/styles.css */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #fefefe;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #222;
+}
+
+.app-container {
+  padding: 1rem;
+  max-width: 500px;
+  margin: auto;
+}
+
+.problem-container h2 {
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.answer-box {
+  font-size: 2rem;
+  margin: 0.5rem auto;
+  padding: 0.5rem;
+  width: 100px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.numberpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.numberpad button {
+  padding: 1rem;
+  font-size: 1.2rem;
+  border: none;
+  background: #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.timer {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.results-card {
+  background: #dfffdc;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  border: 1px solid #aaa;
+}
+
+.share-buttons button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.2rem;
+  font-size: 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ad-space {
+  margin-top: 2rem;
+  height: 90px;
+  background: #f1f1f1;
+  border: 1px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.9rem;
+}
 
