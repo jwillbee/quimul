@@ -1,0 +1,17 @@
+{
+  "name": "math-challenge-backend",
+  "version": "1.0.0",
+  "description": "Backend for Math Challenge Web App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=16.x"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1"
+  }
+}
