@@ -1,71 +1,68 @@
-import React, { useState } from 'react';
-import DailyChallengeManager from './components/DailyChallengeManager';
-import ProblemDisplay from './components/ProblemDisplay';
-import NumberPad from './components/NumberPad';
-import Timer from './components/Timer';
-import ResultsCard from './components/ResultsCard';
-import './styles.css';
+import React, { useEffect, useState } from 'react';
+import { fetchDailyProblems } from './api'; // Import the fetchDailyProblems function
 
-export default function App() {
+const App = () => {
   const [problems, setProblems] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [userInput, setUserInput] = useState('');
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [completed, setCompleted] = useState(false);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [completionTime, setCompletionTime] = useState(null);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  const startChallenge = (generatedProblems) => {
-    setProblems(generatedProblems);
-    setCurrentIndex(0);
-    setUserInput('');
-    setStartTime(Date.now());
-    setEndTime(null);
-    setCompleted(false);
+  useEffect(() => {
+    // Check if the daily problems already exist in LocalStorage
+    const storedProblems = localStorage.getItem('quimul_daily_problems');
+    if (storedProblems) {
+      setProblems(JSON.parse(storedProblems));
+    } else {
+      // Fetch new daily problems from the API
+      fetchDailyProblems()
+        .then(data => {
+          setProblems(data);
+          // Store the fetched problems in LocalStorage for the day
+          localStorage.setItem('quimul_daily_problems', JSON.stringify(data));
+        })
+        .catch(error => console.error('Error fetching daily problems:', error));
+    }
+  }, []);
+
+  const handleAnswer = (problemIndex, answer) => {
+    setUserAnswers(prev => ({ ...prev, [problemIndex]: answer }));
   };
 
-  const handleInput = (digit) => {
-    if (digit === '←') {
-      setUserInput(userInput.slice(0, -1));
-    } else if (digit === '↵') {
-      const [a, b] = problems[currentIndex];
-      if (parseInt(userInput) === a * b) {
-        if (currentIndex === problems.length - 1) {
-          setEndTime(Date.now());
-          setCompleted(true);
-        } else {
-          setCurrentIndex(currentIndex + 1);
-          setUserInput('');
-        }
-      }
-    } else {
-      setUserInput(userInput + digit);
-    }
+  const handleSubmit = () => {
+    const timeMs = Date.now() - startTime; // Calculate time taken to complete
+    setCompletionTime(timeMs);
+    setIsCompleted(true);
+
+    // Call the API to record the completion time
+    recordCompletion(timeMs);
   };
 
   return (
-    <div className="app-container">
-      <h1>Math 50 Challenge</h1>
-      <DailyChallengeManager onStart={startChallenge} />
-
-      {problems.length > 0 && !completed && (
+    <div>
+      <h1>Math Challenge</h1>
+      {!isCompleted ? (
         <>
-          <Timer startTime={startTime} running={!completed} />
-          <ProblemDisplay
-            problem={problems[currentIndex]}
-            userInput={userInput}
-          />
-          <NumberPad onInput={handleInput} />
+          {problems.map((problem, index) => (
+            <div key={index}>
+              <p>{problem.question}</p>
+              {/* Render the NumberPad component or input form to answer the problem */}
+              <input
+                type="number"
+                onChange={e => handleAnswer(index, e.target.value)}
+                value={userAnswers[index] || ''}
+              />
+            </div>
+          ))}
+          <button onClick={handleSubmit}>Submit Answers</button>
         </>
+      ) : (
+        <div>
+          <h2>Well done!</h2>
+          <p>You completed all the problems in {completionTime}ms</p>
+        </div>
       )}
-
-      {completed && (
-        <ResultsCard startTime={startTime} endTime={endTime} />
-      )}
-
-      <div className="ad-space">
-        {/* Reserved space for Google Ads */}
-      </div>
     </div>
   );
-}
+};
 
+export default App;
