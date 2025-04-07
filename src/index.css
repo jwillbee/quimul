@@ -1,0 +1,75 @@
+/* index.css */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f2f2f2;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#root {
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #005bb5;
+}
+
+input {
+  padding: 0.5rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 60px;
+  text-align: center;
+}
+
+.number-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.number-pad button {
+  font-size: 1.25rem;
+  padding: 1rem;
+}
+
+footer {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: #888;
+}
