@@ -1,61 +1,74 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDailyProblems, recordCompletion } from './api'; // Don't forget recordCompletion!
+import { fetchDailyProblems, recordCompletion } from './api';
+import NumberPad from './NumberPad';
 
 const App = () => {
   const [problems, setProblems] = useState([]);
-  const [userAnswers, setUserAnswers] = useState({});
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [userInput, setUserInput] = useState('');
+  const [startTime, setStartTime] = useState(null);
   const [completionTime, setCompletionTime] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [startTime, setStartTime] = useState(null); // Add startTime
 
   useEffect(() => {
     const storedProblems = localStorage.getItem('quimul_daily_problems');
     if (storedProblems) {
       setProblems(JSON.parse(storedProblems));
-      setStartTime(Date.now()); // Start timer if problems already in localStorage
+      setStartTime(Date.now());
     } else {
       fetchDailyProblems()
         .then(data => {
           setProblems(data);
           localStorage.setItem('quimul_daily_problems', JSON.stringify(data));
-          setStartTime(Date.now()); // Start timer after problems are fetched
+          setStartTime(Date.now());
         })
-        .catch(error => console.error('Error fetching daily problems:', error));
+        .catch(err => console.error('Error loading problems:', err));
     }
   }, []);
 
-  const handleAnswer = (problemIndex, answer) => {
-    setUserAnswers(prev => ({ ...prev, [problemIndex]: answer }));
+  const handleNumberClick = (num) => {
+    setUserInput(prev => prev + num);
+  };
+
+  const handleDelete = () => {
+    setUserInput(prev => prev.slice(0, -1));
   };
 
   const handleSubmit = () => {
-    if (!startTime) {
-      console.error('Start time not set.');
-      return;
+    const currentProblem = problems[currentIndex];
+    const correctAnswer = currentProblem.answer.toString();
+    if (userInput === correctAnswer) {
+      if (currentIndex + 1 < problems.length) {
+        setCurrentIndex(prev => prev + 1);
+        setUserInput('');
+      } else {
+        const timeMs = Date.now() - startTime;
+        setCompletionTime(timeMs);
+        setIsCompleted(true);
+        recordCompletion(timeMs);
+      }
+    } else {
+      alert('Wrong answer. Try again!');
     }
-
-    const timeMs = Date.now() - startTime;
-    setCompletionTime(timeMs);
-    setIsCompleted(true);
-    recordCompletion(timeMs);
   };
+
+  if (!problems.length) return <p>Loading problems...</p>;
 
   return (
     <div>
       <h1>Math Challenge</h1>
       {!isCompleted ? (
         <>
-          {problems.map((problem, index) => (
-            <div key={index}>
-              <p>{problem.question}</p>
-              <input
-                type="number"
-                onChange={e => handleAnswer(index, e.target.value)}
-                value={userAnswers[index] || ''}
-              />
-            </div>
-          ))}
-          <button onClick={handleSubmit}>Submit Answers</button>
+          <p>
+            Problem {currentIndex + 1} of {problems.length}
+          </p>
+          <h2>{problems[currentIndex].question}</h2>
+          <div className="answer-display">{userInput || '_'}</div>
+          <NumberPad
+            onNumberClick={handleNumberClick}
+            onDelete={handleDelete}
+            onSubmit={handleSubmit}
+          />
         </>
       ) : (
         <div>
