@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDailyProblems } from './api'; // Import the fetchDailyProblems function
+import { fetchDailyProblems, recordCompletion } from './api'; // Don't forget recordCompletion!
 
 const App = () => {
   const [problems, setProblems] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [completionTime, setCompletionTime] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [startTime, setStartTime] = useState(null); // Add startTime
 
   useEffect(() => {
-    // Check if the daily problems already exist in LocalStorage
     const storedProblems = localStorage.getItem('quimul_daily_problems');
     if (storedProblems) {
       setProblems(JSON.parse(storedProblems));
+      setStartTime(Date.now()); // Start timer if problems already in localStorage
     } else {
-      // Fetch new daily problems from the API
       fetchDailyProblems()
         .then(data => {
           setProblems(data);
-          // Store the fetched problems in LocalStorage for the day
           localStorage.setItem('quimul_daily_problems', JSON.stringify(data));
+          setStartTime(Date.now()); // Start timer after problems are fetched
         })
         .catch(error => console.error('Error fetching daily problems:', error));
     }
@@ -29,11 +29,14 @@ const App = () => {
   };
 
   const handleSubmit = () => {
-    const timeMs = Date.now() - startTime; // Calculate time taken to complete
+    if (!startTime) {
+      console.error('Start time not set.');
+      return;
+    }
+
+    const timeMs = Date.now() - startTime;
     setCompletionTime(timeMs);
     setIsCompleted(true);
-
-    // Call the API to record the completion time
     recordCompletion(timeMs);
   };
 
@@ -45,7 +48,6 @@ const App = () => {
           {problems.map((problem, index) => (
             <div key={index}>
               <p>{problem.question}</p>
-              {/* Render the NumberPad component or input form to answer the problem */}
               <input
                 type="number"
                 onChange={e => handleAnswer(index, e.target.value)}
