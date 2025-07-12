@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NumberPad from './components/NumberPad';
 import ResultsCard from './components/ResultsCard';
-import { fetchDailyProblems } from './api';
+import { fetchDailyProblems } from './api/problems';
 
 const App = () => {
   const [problems, setProblems] = useState([]);
