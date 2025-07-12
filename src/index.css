@@ -1,56 +1,159 @@
+/* index.css */
 body {
-  font-family: sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
-  background: #f3f3f3;
+  background: linear-gradient(to bottom, #fefefe, #f3f3f3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 2rem;
+  padding-top: 6rem; /* space for timer */
+  color: #222;
+  min-height: 100vh;
 }
 
+/* Fixed timer */
+.timer {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: #ffffffcc;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  z-index: 1000;
+}
+
+/* App container */
+.app {
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+/* Header */
 h1 {
   margin-bottom: 1rem;
+  font-size: 2.2rem;
+  color: #000;
 }
 
-.answer-display {
-  font-size: 2rem;
+/* Problem box */
+.problem-box h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.problem-question {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: #0077ff;
+}
+
+.user-input {
+  font-size: 2.4rem;
   margin: 1rem 0;
   padding: 1rem 2rem;
   background: white;
-  border-radius: 8px;
-  border: 2px solid #ccc;
-  min-width: 100px;
+  border-radius: 10px;
+  border: 3px solid #0077ff;
+  min-width: 120px;
   text-align: center;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  color: #000;
 }
 
+/* Number pad wrapper */
 .number-pad {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
+/* Number pad layout */
 .pad-grid {
   display: grid;
-  grid-template-columns: repeat(3, 80px);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   justify-content: center;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
+/* Number pad buttons */
 .pad-grid button {
-  padding: 1rem;
-  font-size: 1.25rem;
-  border-radius: 8px;
+  padding: 1.2rem;
+  font-size: 1.4rem;
+  border-radius: 10px;
   border: none;
   background-color: #0077ff;
   color: white;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .pad-grid button:hover {
   background-color: #005fd4;
 }
 
+.pad-grid button:active {
+  transform: scale(0.96);
+}
+
 button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
+}
+
+/* Results card */
+.results-card {
+  background: #e6ffec;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 12px;
+  border: 1px solid #c1e3c5;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+/* Share buttons */
+.share-buttons {
+  margin-top: 1rem;
+}
+
+.share-buttons button {
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.share-buttons button:hover {
+  background: #0056cc;
+}
+
+/* Ad space */
+.ad-space {
+  margin-top: 2rem;
+  height: 90px;
+  background: #fafafa;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 0.9rem;
+  border-radius: 8px;
 }
