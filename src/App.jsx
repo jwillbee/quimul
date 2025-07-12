@@ -34,8 +34,9 @@ const App = () => {
       fetchDailyProblems()
         .then(data => {
           if (Array.isArray(data) && data.length > 0) {
-            setProblems(data);
-            localStorage.setItem('quimul_daily_problems', JSON.stringify(data));
+            const shuffled = data.sort(() => Math.random() - 0.5);
+            setProblems(shuffled);
+            localStorage.setItem('quimul_daily_problems', JSON.stringify(shuffled));
           } else {
             console.error("No problems received from backend.");
           }
