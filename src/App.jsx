@@ -21,14 +21,28 @@ const App = () => {
     if (best) setBestTime(parseInt(best));
     if (completed) setIsCompleted(true);
 
-    if (stored) {
-      const parsed = JSON.parse(stored);
+    let parsed = [];
+    try {
+      parsed = JSON.parse(stored);
+    } catch (err) {
+      console.warn("Failed to parse stored problems:", err);
+    }
+
+    if (parsed && Array.isArray(parsed) && parsed.length > 0) {
       setProblems(parsed);
     } else {
-      fetchDailyProblems().then(data => {
-        setProblems(data);
-        localStorage.setItem('quimul_daily_problems', JSON.stringify(data));
-      });
+      fetchDailyProblems()
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            setProblems(data);
+            localStorage.setItem('quimul_daily_problems', JSON.stringify(data));
+          } else {
+            console.error("No problems received from backend.");
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching daily problems:", err);
+        });
     }
   }, []);
 
